@@ -4,6 +4,14 @@
   <test name="Test">
     <classes>
       <class name="testcases.TestHome"/>
+      <class name="testcases.TestComment"/>
+      <class name="testcases.TestCompetition"/>
+      <class name="testcases.TestFollow"/>
+      <class name="testcases.TestLike"/>
+      <class name="testcases.TestSearch"/>
+      <class name="testcases.TestUser"/>
+      <class name="testcases.TestViews"/>
+      <class name="testcases.TestVoteCompetition"/>
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
