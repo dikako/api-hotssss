@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import io.restassured.http.ContentType;
+import io.restassured.http.ContentType; 
 public class TestLike extends Base {
 
   @Severity(SeverityLevel.CRITICAL)

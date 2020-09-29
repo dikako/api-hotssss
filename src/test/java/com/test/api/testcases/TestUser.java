@@ -44,5 +44,48 @@ public class TestUser extends Base {
     validation.GetNotNullOr("data.email", "data.phone", rs);
   }
 
+  @Severity(SeverityLevel.CRITICAL)
+  @Description("Get Other User")
+  @Test(priority = 1, testName = "Get Other User", dataProvider = "User")
+  public void otherUserVisitorToken(String username, String password) {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    Validation validation = new Validation();
+
+    String id = token.id(username, password, "65657", "android");
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/user/user-profile"))
+    .param("user_id", id)
+        .headers("Authorization", token.visitor()).when().get().then().log().all()
+        .statusCode(200).log().all();
+
+    validation.getMessageClientSuccess(rs);
+    validation.GetNotNull("data.user_id", rs);
+    validation.GetNotNull("data.role", rs);
+    validation.GetNotNull("data.total_followers", rs);
+    validation.GetNotNullOr("data.nickname", "data.display_name", rs);
+  }
+
+  @Severity(SeverityLevel.CRITICAL)
+  @Description("Get Other User")
+  @Test(priority = 2, testName = "Get Other User", dataProvider = "User")
+  public void otherUserTokenUser(String username, String password) {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    Validation validation = new Validation();
+
+    String id = token.id(username, password, "65657", "android");
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/user/user-profile"))
+    .param("user_id", id)
+        .headers("Authorization", token.login("paijo@mailinator.com", "dikakoko", "5363", "android")).when().get().then().log().all()
+        .statusCode(200).log().all();
+
+    validation.getMessageClientSuccess(rs);
+    validation.GetNotNull("data.user_id", rs);
+    validation.GetNotNull("data.role", rs);
+    validation.GetNotNull("data.total_followers", rs);
+    validation.GetNotNullOr("data.nickname", "data.display_name", rs);
+  }
 
 }

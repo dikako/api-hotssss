@@ -83,4 +83,22 @@ public class TestHome extends Base {
     validation.getMessageClientSuccess(rs);
     validation.getMessageServerSuccess(rs);
   }
+
+  // @Severity(SeverityLevel.CRITICAL)
+  // @Description("Get Competition Video Category")
+  // @Test(priority = 3, testName = "Get Competition Video Category")
+  // public void getCompetitionVideoCategory() {
+  //   Token token = new Token();
+  //   BaseUrl baseUrl = new BaseUrl();
+  //   Validation validation = new Validation();
+
+  //   rs.baseUri(baseUrl.urlUgcVote("/v1/home/competition" + token.competitionId() + "/" + token.videoId())).headers("Authorization", token.visitor()).when().get().then()
+  //       .statusCode(200).log().all();
+
+  //   validation.GetNotNull("data.id", rs);
+  //   validation.GetNotNull("data.api", rs);
+  //   validation.GetBodyList("data.title", rs, "[" + "Now," + "Soon," + "Expired" + "]");
+  //   validation.getMessageClientSuccess(rs);
+  //   validation.getMessageServerSuccess(rs);
+  // }
 }

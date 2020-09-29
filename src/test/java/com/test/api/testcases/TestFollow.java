@@ -54,6 +54,8 @@ public class TestFollow extends Base {
         .headers("Authorization", token.login("dikakoko04@gmail.com", "dikakoko", "1234", "android")).log().all().when()
         .get().then().statusCode(200).log().all();
 
+    String status = validation.returnGetBody(rs, "data.following");
+
     validation.getMessageClientSuccess(rs);
     validation.GetNotNull("data.role", rs);
     validation.GetNotNull("data.user_id", rs);
@@ -153,13 +155,53 @@ public class TestFollow extends Base {
     BaseUrl baseUrl = new BaseUrl();
     Validation validation = new Validation();
 
-    rs.baseUri(baseUrl.urlUgcVote("/v1/user/followers"))
-        .headers("Authorization", token.login(username, password, "1234", "android")).when().get().then()
+    rs.baseUri(baseUrl.urlUgcVote("/v1/user/my-followers"))
+        .headers("Authorization", token.login(username, password, "1234", "android")).log().all().when().get().then().log().all()
         .statusCode(200).log().all();
 
     String id = token.id("dikakoko04@gmail.com", "dikakoko", "1234", "android");
 
     validation.getBodyContains("data.user_id", rs, id);
+  }
+
+  @Severity(SeverityLevel.CRITICAL)
+  @Description("Get Follower Other User")
+  @Test(priority = 5, testName = "Get Follower", dataProvider = "TargetUserFollowUnfollow")
+  public void followerTokenUser(String username, String password) {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    Validation validation = new Validation();
+
+    String id = token.id(username, password, "1234", "android");
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/user/followers"))
+        .headers("Authorization", token.login("dikakoko04@gmail.com", "dikakoko", "1234", "android"))
+        .param("user_id", id).log().all().when().get().then().log().all()
+        .statusCode(200);
+
+    String idTokenUsr = token.id("dikakoko04@gmail.com", "dikakoko", "1234", "android");
+
+    validation.getBodyContains("data.user_id", rs, idTokenUsr);
+  }
+
+  @Severity(SeverityLevel.CRITICAL)
+  @Description("Get Follower Other User")
+  @Test(priority = 5, testName = "Get Follower", dataProvider = "TargetUserFollowUnfollow")
+  public void followerTokenVisitor(String username, String password) {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    Validation validation = new Validation();
+
+    String id = token.id(username, password, "1234", "android");
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/user/followers"))
+        .headers("Authorization", token.visitor())
+        .param("user_id", id).log().all().when().get().then().log().all()
+        .statusCode(200);
+
+    String idTokenUsr = token.id("dikakoko04@gmail.com", "dikakoko", "1234", "android");
+
+    validation.getBodyContains("data.user_id", rs, idTokenUsr);
   }
 
   @Severity(SeverityLevel.CRITICAL)
@@ -210,7 +252,7 @@ public class TestFollow extends Base {
 
   @Severity(SeverityLevel.CRITICAL)
   @Description("Post FollowSelf")
-  @Test(priority = 8, testName = "Post FollowSelf", dataProvider = "UserFollowUnfollow")
+  @Test(priority = 8, testName = "Post FollowSelf", dataProvider = "TargetUserFollowUnfollow")
   public void followSelf(String username, String password) {
     Token token = new Token();
     BaseUrl baseUrl = new BaseUrl();
@@ -232,7 +274,7 @@ public class TestFollow extends Base {
 
   @Severity(SeverityLevel.CRITICAL)
   @Description("Post Follow Without Token")
-  @Test(priority = 9, testName = "Post Follow Without Token", dataProvider = "UserFollowUnfollow")
+  @Test(priority = 9, testName = "Post Follow Without Token", dataProvider = "TargetUserFollowUnfollow")
   public void followWithoutToken(String username, String password) {
     Token token = new Token();
     BaseUrl baseUrl = new BaseUrl();
@@ -254,7 +296,7 @@ public class TestFollow extends Base {
 
   @Severity(SeverityLevel.CRITICAL)
   @Description("Post Follow With Visitor Token")
-  @Test(priority = 10, testName = "Post Follow With Visitor Token", dataProvider = "UserFollowUnfollow")
+  @Test(priority = 10, testName = "Post Follow With Visitor Token", dataProvider = "TargetUserFollowUnfollow")
   public void followWithVisitorToken(String username, String password) {
     Token token = new Token();
     BaseUrl baseUrl = new BaseUrl();
@@ -276,7 +318,7 @@ public class TestFollow extends Base {
 
   @Severity(SeverityLevel.CRITICAL)
   @Description("Post UNFollow Without Token")
-  @Test(priority = 11, testName = "Post UNFollow Without Token", dataProvider = "UserFollowUnfollow")
+  @Test(priority = 11, testName = "Post UNFollow Without Token", dataProvider = "TargetUserFollowUnfollow")
   public void unfollowWithoutToken(String username, String password) {
     Token token = new Token();
     BaseUrl baseUrl = new BaseUrl();
@@ -299,7 +341,7 @@ public class TestFollow extends Base {
 
   @Severity(SeverityLevel.CRITICAL)
   @Description("Post UnFollow With Visitor Token")
-  @Test(priority = 12, testName = "Post UnFollow With Visitor Token", dataProvider = "UserFollowUnfollow")
+  @Test(priority = 12, testName = "Post UnFollow With Visitor Token", dataProvider = "TargetUserFollowUnfollow")
   public void unfollowWithVisitorToken(String username, String password) {
     Token token = new Token();
     BaseUrl baseUrl = new BaseUrl();
@@ -318,5 +360,4 @@ public class TestFollow extends Base {
 
     validation.postBody("message", rs, "Please Sign In \n Woops! Gonna sign in first\n Only a click away and you can continue to enjoy");
   }
-
 }

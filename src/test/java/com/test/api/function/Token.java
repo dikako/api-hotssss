@@ -80,6 +80,42 @@ public class Token {
     return tokens;
   }
 
+  public String competition_id() {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    RequestSpecification rs = RestAssured.given();
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/home/" + competitionId())).headers("Authorization", token.visitor()).when().get().then()
+        .statusCode(200);
+
+    Response res = rs.get();
+    return res.getBody().path("data[0].id").toString();
+  }
+
+  public String contestatnt_id() {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    RequestSpecification rs = RestAssured.given();
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/home/" + competitionId())).headers("Authorization", token.visitor()).when().get().then()
+        .statusCode(200);
+
+    Response res = rs.get();
+    return res.getBody().path("data[0].videos[0].author.user_id").toString();
+  }
+
+  public String vote_video__id() {
+    Token token = new Token();
+    BaseUrl baseUrl = new BaseUrl();
+    RequestSpecification rs = RestAssured.given();
+
+    rs.baseUri(baseUrl.urlUgcVote("/v1/home/" + competitionId())).headers("Authorization", token.visitor()).when().get().then()
+        .statusCode(200);
+
+    Response res = rs.get();
+    return res.getBody().path("data[0].videos[0].video_id").toString();
+  }
+
   public String competitionId() {
     Token token = new Token();
     BaseUrl baseUrl = new BaseUrl();
@@ -114,7 +150,7 @@ public class Token {
     Validation validation = new Validation();
     RequestSpecification rs = RestAssured.given();
 
-    rs.baseUri(baseUrl.urlUgcVote("/v1/vote/competition")).param("competition_id", token.competitionId())
+    rs.baseUri(baseUrl.urlUgcVote("/v1/vote/competition")).param("competition_id", competition_id())
     .headers("Authorization", token.login("paijo@mailinator.com", "dikakoko", "1234", "android")).log().all().when().get()
     .then().statusCode(200).log().all();
 

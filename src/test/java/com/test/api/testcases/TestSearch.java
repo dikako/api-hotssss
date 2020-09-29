@@ -56,10 +56,10 @@ public class TestSearch extends Base {
     BaseUrl baseUrl = new BaseUrl();
     Validation validation = new Validation();
 
-    rs.baseUri(baseUrl.urlUgcVote("/v1/search/users")).param("q", "epfhweguehferhbcdhfbsdjhfb").log().all().headers("Authorization", token.visitor())
-        .log().all().when().get().then().statusCode(404).log().all();
-
-        validation.getBody("status.message_client", rs, "no user found");
+    rs.baseUri(baseUrl.urlUgcVote("/v1/search/users")).param("q", "hgjhgj8996976976969769769fhweguehferhbcdhfbsdjhfb").log().all().headers("Authorization", token.visitor())
+        .log().all().when().get().then().log().all().statusCode(200).log().all();
+        
+        validation.getBody("meta.pagination.total", rs, "0");
   }
 
   @Severity(SeverityLevel.CRITICAL)
